@@ -33,8 +33,10 @@ public class MainPresenter implements Presenter<MainMVPView> {
         Timber.tag("MainPresenter");
         if (dataManager == null) {
             this.dataManager = new AppDataManager();
+            Timber.i("AppDataManager set.");
         } else {
             this.dataManager = dataManager;
+            Timber.i("Custom DataManager set: %s", this.dataManager.getClass().getSimpleName());
         }
 
         geocodeLocations = new ArrayList<>();
@@ -80,7 +82,7 @@ public class MainPresenter implements Presenter<MainMVPView> {
                         List<Double> coords = response.getFeatures().get(0).getGeometry().getCoordinates();
                         view.displayGeocodeText("Latitude = " + coords.get(1) + ", Longitude = " + coords.get(0));
                     } else {
-                        view.displayGeocodeText("No Geocoding Response.");
+                        view.displayNoResults();
                     }
                 }
             });

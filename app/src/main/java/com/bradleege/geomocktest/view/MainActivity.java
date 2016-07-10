@@ -55,4 +55,10 @@ public class MainActivity extends AppCompatActivity implements MainMVPView {
         Timber.d("displayGeocodeText() called with text = ''%s'", text);
         geocodeTextView.setText(text);
     }
+
+    @Override
+    public void displayNoResults() {
+        Timber.i("displayNoResults() called.");
+        geocodeTextView.setText("There were no geocoding results.");
+    }
 }
