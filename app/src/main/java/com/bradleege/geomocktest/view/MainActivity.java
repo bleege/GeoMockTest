@@ -3,8 +3,12 @@ package com.bradleege.geomocktest.view;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import com.bradleege.geomocktest.R;
 import com.bradleege.geomocktest.presenters.MainPresenter;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements MainMVPView {
 
@@ -14,10 +18,21 @@ public class MainActivity extends AppCompatActivity implements MainMVPView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Timber.plant(new Timber.DebugTree());
+        Timber.tag("MainActivity");
+
         presenter = new MainPresenter();
         presenter.attachView(this);
 
         setContentView(R.layout.activity_main);
+
+        Button geocodeButton = (Button) findViewById(R.id.geocodeButton);
+        geocodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onGeocodeButtonClick();
+            }
+        });
     }
 
     @Override

@@ -32,4 +32,7 @@ dependencies {
     compile ('com.mapbox.mapboxsdk:mapbox-android-services:1.1.0@aar'){
         transitive = true
     }
+
+    // Timber
+    compile 'com.jakewharton.timber:timber:4.1.2'
 }
