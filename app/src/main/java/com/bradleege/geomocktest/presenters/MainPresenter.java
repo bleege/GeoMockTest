@@ -4,7 +4,13 @@ import com.bradleege.geomocktest.model.AppDataManager;
 import com.bradleege.geomocktest.model.DataManager;
 import com.bradleege.geomocktest.view.MainMVPView;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
+
 import java.util.ArrayList;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainPresenter implements Presenter<MainMVPView> {
@@ -55,7 +61,24 @@ public class MainPresenter implements Presenter<MainMVPView> {
         }
 
         try {
-            dataManager.geocode(geocodeLocations.get(geocodeIndex));
+            dataManager.geocode(geocodeLocations.get(geocodeIndex))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GeocodingResponse>() {
+                @Override
+                public void onCompleted() {
+                    Timber.i("onCompleted()");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Timber.e(e, "Error Subscribing to dataManager.geocode(): %s", e.getMessage());
+                }
+
+                @Override
+                public void onNext(GeocodingResponse response) {
+                    Timber.i("onNext() GeocodingResponse = %s", response);
+                }
+            });
         } catch (ServicesException e) {
             Timber.e(e, "Error while geocoding: %s", e.getMessage());
         }
