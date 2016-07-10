@@ -39,12 +39,23 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void onGeocodeButtonClickTest() throws ServicesException {
-        GeocodingResponse testResponse = TestDataManager.makeGeocodingResponse();
+    public void onGeocodeButtonClickNoResultsTest() throws ServicesException {
+        GeocodingResponse testResponse = TestDataManager.makeEmptyGeocodingResponse();
         when(mockDataManager.geocode("1265 Lombardi Avenue")).thenReturn(Observable.just(testResponse));
 
         mainPresenter.onGeocodeButtonClick();
         verify(mockMainMVPView, never()).displayGeocodeText("XXX");
         verify(mockMainMVPView).displayNoResults();
     }
+
+    @Test
+    public void onGeocodeButtonClickTest() throws ServicesException {
+        GeocodingResponse testResponse = TestDataManager.makeGeocodingResponseWithSingleFeature();
+        when(mockDataManager.geocode("1265 Lombardi Avenue")).thenReturn(Observable.just(testResponse));
+
+        mainPresenter.onGeocodeButtonClick();
+        verify(mockMainMVPView, never()).displayNoResults();
+        verify(mockMainMVPView).displayGeocodeText("Latitude = 44.501213, Longitude = -88.061874");
+    }
+
 }
