@@ -6,6 +6,7 @@ import com.bradleege.geomocktest.view.MainMVPView;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import java.util.ArrayList;
+import java.util.List;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -54,7 +55,7 @@ public class MainPresenter implements Presenter<MainMVPView> {
 
     public void onGeocodeButtonClick() {
         Timber.i("onGeocodeButtonClick");
-        if (geocodeIndex == geocodeLocations.size() - 1) {
+        if (geocodeIndex == geocodeLocations.size()) {
             geocodeIndex = 0;
         }
 
@@ -75,6 +76,12 @@ public class MainPresenter implements Presenter<MainMVPView> {
                 @Override
                 public void onNext(GeocodingResponse response) {
                     Timber.i("onNext() GeocodingResponse = %s", response);
+                    if (response != null && response.getFeatures().size() > 0) {
+                        List<Double> coords = response.getFeatures().get(0).getGeometry().getCoordinates();
+                        view.displayGeocodeText("Latitude = " + coords.get(1) + ", Longitude = " + coords.get(0));
+                    } else {
+                        view.displayGeocodeText("No Geocoding Response.");
+                    }
                 }
             });
             geocodeIndex++;
