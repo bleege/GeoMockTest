@@ -1,0 +1,9 @@
+package com.bradleege.geomocktest.presenters;
+
+public interface Presenter<V> {
+
+    void attachView(V view);
+
+    void detachView();
+
+}
