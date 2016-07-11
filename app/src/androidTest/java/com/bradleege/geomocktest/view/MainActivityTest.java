@@ -17,11 +17,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class MainActivityTest {
 
     @Rule
-    public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class, false, true);
 
     @Test
     public void testSanity() {
-        main.launchActivity(null);
         onView(withId(R.id.geocodeResultTextView)).check(matches(withText("Georesults Here!")));
     }
 }
